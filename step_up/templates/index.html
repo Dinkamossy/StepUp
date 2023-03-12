@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'style.css') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} - Step Up</title>
+</head>
+<style>
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+</style>
+<body>
+{% block content %}
+    <div id="navbar" style="height:15vh; width:100%; background-color: #639AAB; position: static " >
+        <a href="{{ url_for('auth.login') }}" style="right:0; top:0;"><b>Log In</b></a>
+        <a href ="{{ url_for('auth.register') }}" style="right:0; top:0; "><b>Register</b></a>
+    </div>
+    <div class = "Welcome-text">
+        <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='StepUp.png') }}" style = "width: 750px; height: 500px;"  alt="StepUp logo"></a>
+        <p style="text-align: center; font-weight: bolder; color: white">Lose weight through steps</p>
+    </div>
+{%  endblock %}
+</body>
+
+</html>
