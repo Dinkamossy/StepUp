@@ -1,5 +1,7 @@
 import os
 
+import flask
+import base64
 from flask import Flask
 
 
@@ -24,15 +26,23 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    @app.template_filter('make_image')
+    def make_image(image):
+        return str(base64.b64encode(image), "utf-8")
 
-    from . import database
+    # Initialize the database
+    import step_up.database as database
     database.init_app(app)
 
-    from . import auth
+    @app.route('/')
+    def mainpage():
+        return flask.render_template('index.html')
+
+    @app.route('/login')
+    def login_page():
+        return flask.render_template("auth/login.html")
+
+    import step_up.auth as auth
     app.register_blueprint(auth.bp)
 
     return app
