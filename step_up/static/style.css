@@ -1,11 +1,29 @@
-body {
-    margin: 0;
-    padding: 0;
-    background: #639AAB;
-    background-position: center;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+body{
+  background-color: #639AAB;
+  height: 500px;
+  background-position: center center;
+  position: relative;
 }
-.navbar{
-    height:110px; width:100%; border-bottom: 1px solid #F89E19;
-    background: #639AAB;
+
+.h1-h3{
+  background-color: #CFCFCF;
+  color: #639AAB;
+}
+.Welcome-text {
+font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+font-size:20px;
+  background-color: #639AAB;
+  color: black;
+text-align:center;
+}
+.Welcome-text p {
+background-color: #639AAB;
+}
+.table-header{
+  color: #639AAB;
+
+}
+.table{
+  background-color: white;
+
 }
