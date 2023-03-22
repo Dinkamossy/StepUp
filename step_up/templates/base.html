@@ -104,8 +104,8 @@ a:link {
                <div style = "flex:50%">
                 <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo.png') }}" style = "width: 400px;height: 75px;"  alt="StepUp logo"></a>
                    {# <p class = "title" style ="text-align: center; color: white; font-size: 20px; margin-top: -40px"><b>Step Up</b></p><br>#}
-                   <a href ="{{ url_for('auth.register') }}" style="text-align: right; right:0; top:0; "><b>Register</b></a>
-                   <a href="{{ url_for('auth.login') }}" style="text-align: right; right:0; top:0;"><b>Log In</b></a>
+                   <a href ="{{ url_for('auth.register') }}" style="text-align:center; right:0; top:0; "><b>Register</b></a>
+                   <a href="{{ url_for('auth.login') }}" style="text-align:center; right:0; top:0;"><b>Log In</b></a>
                </div>
         {% endif %}
     </div>

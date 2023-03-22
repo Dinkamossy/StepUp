@@ -31,38 +31,27 @@ def register():
         username = request.form['username']
         password: str = request.form['password']
         email = request.form['email_address']
-        sex = request.form['sex']
-        race = request.form['race']
-        age = request.form['age']
-        feet = request.form['feet']
-        inches = request.form['inches']
-        userid = request.form['userid']
-        current_weight = request.form['current_weight']
-        target_weight = request.form['target_weight']
-        weight_circum = request.form['weight_circum']
-        neck_circum = request.form['neck_circum']
-        body_comp = request.form['body_comp']
+
+        sex = 'male'
+        race = 'other'
+        age = '01-01-2000'
+        feet = '0'
+        inches = '0'
+        userid = '0'
+        current_weight = '0'
+        target_weight = '0'
+        weight_circum = '0'
+        neck_circum = '0'
+        body_comp = '0'
 
         database = get_database()
         error = None
-
-        # Validate information
 
         # we need a limit on these two
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-
-        if not age:
-            error = 'Date of birth is required'
-        elif age:
-            try:
-                correct_date = bool(datetime.strptime(age, "%m-%d-%Y"))
-            except ValueError:
-                correct_date = False
-            if not correct_date:
-                error = 'Date of birth must be formatted as MM-DD-YYYY'
 
         # Validate format of user's email address
         email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
@@ -77,7 +66,7 @@ def register():
                 # Hash the new password
                 password = generate_password_hash(password)
                 database.execute(
-                    "INSERT INTO users (username, email, password, sex, race, age, feet, inches, userid,"
+                    "INSERT INTO user (username, email, password, sex, race, age, feet, inches, userid, "
                     "current_weight, target_weight, weight_circum, neck_circum, body_comp) VALUES "
                     "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     (username, email, password, sex, race, age, feet, inches, userid,
@@ -124,6 +113,84 @@ def login():
         flash(error)
 
     return render_template('auth/login.html')
+
+
+@bp.route('/patient_survey', methods=('GET', 'POST'))
+@login_required
+def patient_survey(username):
+    """
+    Allows users to enter their information into the database
+    """
+    if request.method == 'POST':
+        # Get security questions from the form
+        sex = request.form['sex']
+        race = request.form['race']
+        age = request.form['age']
+        feet = request.form['feet']
+        inches = request.form['inches']
+        userid = request.form['userid']
+        current_weight = request.form['current_weight']
+        target_weight = request.form['target_weight']
+        weight_circum = request.form['weight_circum']
+        neck_circum = request.form['neck_circum']
+        body_comp = request.form['body_comp']
+
+        # Get a handle on the database and set error value
+        database = get_database()
+        error = None
+
+        # Verify Data (add more validation)
+        if not sex:
+            error = 'Please enter your sex'
+        if not race:
+            error = 'Please enter your race'
+        if not age:
+            error = 'Please enter your date of birth'
+        elif age:
+            try:
+                correct_date = bool(datetime.strptime(age, "%m-%d-%Y"))
+            except ValueError:
+                correct_date = False
+            if not correct_date:
+                error = 'Date of birth must be formatted as MM-DD-YYYY'
+        if not feet:
+            error = 'Please enter your feet in height'
+        if not inches:
+            error = 'Please enter your inches in height'
+        if not userid:
+            error = 'Please enter your User ID'
+        if not current_weight:
+            error = 'Please enter your current weight'
+        if not target_weight:
+            error = 'Please enter your target weight'
+        if not weight_circum:
+            error = 'Please enter your weight circumference'
+        if not neck_circum:
+            error = 'Please enter your neck circumference'
+        if not body_comp:
+            error = 'Please enter your body composition percent'
+
+        if error is None:
+            try:
+                # Change values in database
+                database.execute(
+                    "UPDATE user SET sex = ?, race = ?, age = ?, feet = ?, inches = ?, userid = ?,"
+                    "current_weight = ?, target_weight = ?, weight_circum = ?, neck_circum = ?, body_comp = ? "
+                    "WHERE username = ?",
+                    (sex, race, age, feet, inches, userid, current_weight, target_weight, weight_circum, neck_circum,
+                     body_comp, g.user['username'])
+                )
+                database.commit()
+            # Catch any errors
+            except (database.InternalError,
+                    database.IntegrityError):
+                error = f"Unable to update survey"
+            else:
+                return redirect(url_for("auth.login"))
+    # Tell the user it worked
+    flash("Info updated!")
+    # TODO Send user to dashboard when it's made
+    return render_template('auth/patient_survey.html')
 
 
 @bp.before_app_request
