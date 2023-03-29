@@ -1,9 +1,11 @@
 import functools
 import re
+from io import BytesIO
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+from PIL import Image
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from step_up.database import get_database
@@ -63,15 +65,14 @@ def register():
                 database.commit()
                 flash('Account Created!')
 
-            # Catch cases where a username already exists
+            # Catch database errors
             except (database.InternalError,
                     database.IntegrityError):
-                error = f"User with username {username} already exists."
+                error = "Unexpected database issue."
             else:
                 return redirect(url_for("auth.patient_survey"))
-
         flash(error)
-    return render_template('auth/register.html')
+    return redirect(url_for('mainpage'))
 
 
 @bp.route('/login', methods=('GET', 'POST'))
@@ -115,7 +116,6 @@ def patient_survey(username):
         age = request.form['age']
         feet = request.form['feet']
         inches = request.form['inches']
-        userid = request.form['userid']
         current_weight = request.form['current_weight']
         target_weight = request.form['target_weight']
         weight_circum = request.form['weight_circum']
@@ -174,9 +174,59 @@ def patient_survey(username):
                 return redirect(url_for("auth.login"))
     # Tell the user it worked
     flash("Info updated!")
-    # TODO Send user to dashboard when it's made
-    return render_template('auth/patient_survey.html')
+    return redirect(url_for('mainpage'))
 
+
+@bp.route('/my_account', methods=('GET', 'POST'))
+@login_required
+def my_account():
+    """
+     View to allow a user to edit information about their account (change password, upload photo, etc.)
+     """
+
+    if request.method == 'POST':
+        # Get handle on DB
+        database = get_database()
+        # Get the info from the form fields
+        username = request.form['username']
+        email = request.form['email']
+        uploaded_pic = request.files['uploaded_pic']
+        # Make sure a picture was supplied
+        if uploaded_pic.filename:
+            # Ensure that the pic uploaded is of the correct type
+            if uploaded_pic.mimetype not in ['image/jpeg', 'image/png']:
+                flash("Improper profile picture format. Profile pictures must be JPEG or PNG")
+                return redirect(url_for('auth.my_account'))
+            # Ensure we know what type of image it is
+            image_type = None
+            if uploaded_pic.mimetype == 'image/jpeg':
+                image_type = "JPEG"
+            if uploaded_pic.mimetype == 'image/png':
+                image_type = "PNG"
+            # Open image using Pillow library for manipulation
+            uploaded_pic = Image.open(uploaded_pic)
+            # Resize the picture to save DB size
+            uploaded_pic.thumbnail((200, 200))
+            # Create a temporary byte buffer for the image
+            temp_buffer = BytesIO()
+            # Write the uploaded image to the temporary byte buffer
+            uploaded_pic.save(temp_buffer, format=image_type)
+            # Save the new image in the database
+            uploaded_pic = temp_buffer.getvalue()
+            database.execute(
+                "UPDATE users SET picture = ?, email = ?, username = ? WHERE userid = ?",
+                (uploaded_pic, email, username, g.user['userid'])
+            )
+            database.commit()
+        else:
+            database.execute(
+                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, address = ? WHERE userid = ?",
+                (email, username, g.user['userid'])
+            )
+            database.commit()
+        # Tell the user it worked
+        flash("Profile updated!")
+        return redirect(url_for('auth.my_account'))
 
 @bp.before_app_request
 def load_logged_in_user():
