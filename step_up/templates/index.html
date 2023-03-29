@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+{% extends 'base.html' %}
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{url_for('static', filename = 'style.css') }}"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %} - Step Up</title>
+    {% block title %}Home{% endblock %}
 </head>
 <style>
 img {
@@ -20,14 +18,16 @@ a:link {
 </style>
 <body>
 {% block content %}
-    <div id="navbar" style="height:15vh; width:100%; background-color: #639AAB; position: static " >
-        <a href="{{ url_for('auth.login') }}" style="right:0; top:0;"><b>Log In</b></a>
-        <a href ="{{ url_for('auth.register') }}" style="right:0; top:0; "><b>Register</b></a>
-    </div>
-    <div class = "Welcome-text">
-        <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='StepUp.png') }}" style = "width: 750px; height: 500px;"  alt="StepUp logo"></a>
-        <p style="text-align: center; font-weight: bolder; color: white">Lose weight through steps</p>
-    </div>
+    {% if g.user %}
+        <div>
+            <p style="text-align: center; font-weight: bolder; color: white">Welcome Back!</p>
+        </div>
+    {% else %}
+        <div class = "Welcome-text">
+            <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='StepUp.png') }}" style = "width: 750px; height: 500px;"  alt="StepUp logo"></a>
+            <p style="text-align: center; font-weight: bolder; color: white">Lose weight through steps</p>
+        </div>
+    {% endif %}
 {%  endblock %}
 </body>
 

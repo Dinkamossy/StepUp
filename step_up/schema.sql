@@ -16,5 +16,6 @@ CREATE TABLE user
     target_weight  INTEGER NOT NULL,
     weight_circum  INTEGER NOT NULL,
     neck_circum    INTEGER NOT NULL,
-    body_comp      INTEGER NOT NULL
+    body_comp      INTEGER NOT NULL,
+    steps          INTEGER NOT NULL
 );

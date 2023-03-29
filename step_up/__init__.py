@@ -2,7 +2,7 @@ import os
 
 import flask
 import base64
-from flask import Flask
+from flask import Flask, g
 
 
 def create_app(test_config=None):

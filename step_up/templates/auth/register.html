@@ -27,6 +27,9 @@
     color: white;
     text-align: center;
 }
+.container h1{
+    padding:0; text-align:center; color: white;
+  }
 .container form{
     position: relative;
     margin-top: 16px;
@@ -168,11 +171,11 @@ form .fields .input-field{
 </style>
 
 <div class = container>
-    <header>
+    <h1>
     {% block title %}
         Create Account
     {% endblock %}
-    </header>
+    </h1>
     <form method="post">
                     <div class = "input-field">
                         <label for="username" >Username</label><br>
@@ -190,14 +193,19 @@ form .fields .input-field{
                     <input class = "submit" type="submit" value="Create" >
 
 
-       <div id="message" style="color:#185DFF">
-          <h3>Password must contain the following:</h3>
-          <p id="length" class="invalid">A <b>minimum of 7 characters</b></p>
-          <p id="letter" class="invalid">Must <b>start with a letter</b> </p>
-          <p id="alphabet" class="invalid"><b>Must have a letter</b></p>
-          <p id="number" class="invalid">At least <b>1 number </b></p>
-          <p id="specialChar" class="invalid">At least <b>1 special character from this list: !@#$%^&*</b></p>
-       </div>
+        <div id="message" style="color:#185DFF">
+            <h3>Password must contain the following:</h3>
+            <p id="length" class="invalid">A <b>minimum of 7 characters</b></p>
+            <p id="letter" class="invalid">Must <b>start with a letter</b> </p>
+            <p id="alphabet" class="invalid"><b>Must have a letter</b></p>
+            <p id="number" class="invalid">At least <b>1 number </b></p>
+            <p id="specialChar" class="invalid">At least <b>1 special character from this list: !@#$%^&*</b></p>
+        </div>
+        <div>
+            <p style="text-align: center; font-weight: bolder; color: white">Already have an account? </p>
+            <a href="{{ url_for('auth.login') }}" style="text-decoration: none; font-size: 14px; line-height: 10px;
+                color: white; display: block; text-align:center">Sign in here</a><br>
+        </div>
     </form>
     </div>
 

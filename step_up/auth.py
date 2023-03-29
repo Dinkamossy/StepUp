@@ -32,18 +32,6 @@ def register():
         password: str = request.form['password']
         email = request.form['email_address']
 
-        sex = 'male'
-        race = 'other'
-        age = '01-01-2000'
-        feet = '0'
-        inches = '0'
-        userid = '0'
-        current_weight = '0'
-        target_weight = '0'
-        weight_circum = '0'
-        neck_circum = '0'
-        body_comp = '0'
-
         database = get_database()
         error = None
 
@@ -66,21 +54,21 @@ def register():
                 # Hash the new password
                 password = generate_password_hash(password)
                 database.execute(
-                    "INSERT INTO user (username, email, password, sex, race, age, feet, inches, userid, "
-                    "current_weight, target_weight, weight_circum, neck_circum, body_comp) VALUES "
+                    "INSERT INTO user (username, email, password, sex, race, age, feet, inches, "
+                    "current_weight, target_weight, weight_circum, neck_circum, body_comp, steps) VALUES "
                     "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (username, email, password, sex, race, age, feet, inches, userid,
-                     current_weight, target_weight, weight_circum, neck_circum, body_comp, 0)
+                    (username, email, password, 'male', 'other', '01-01-2000', 0, 0, 0, 0, 0, 0, 0, 0)
                 )
                 # Write the change to the database
                 database.commit()
+                flash('Account Created!')
 
             # Catch cases where a username already exists
             except (database.InternalError,
                     database.IntegrityError):
                 error = f"User with username {username} already exists."
             else:
-                return redirect(url_for("auth.login"))
+                return redirect(url_for("auth.patient_survey"))
 
         flash(error)
     return render_template('auth/register.html')
@@ -106,8 +94,7 @@ def login():
         # generates cookies for the logged-in user
         if error is None:
             session.clear()
-            session['username'] = user['username']
-            session['role'] = user['role']
+            session['userid'] = user['userid']
             return redirect(url_for('mainpage'))
 
         flash(error)
@@ -139,7 +126,7 @@ def patient_survey(username):
         database = get_database()
         error = None
 
-        # Verify Data (add more validation)
+        # Verify Data todo(add more validation)
         if not sex:
             error = 'Please enter your sex'
         if not race:
@@ -157,8 +144,6 @@ def patient_survey(username):
             error = 'Please enter your feet in height'
         if not inches:
             error = 'Please enter your inches in height'
-        if not userid:
-            error = 'Please enter your User ID'
         if not current_weight:
             error = 'Please enter your current weight'
         if not target_weight:
@@ -174,10 +159,10 @@ def patient_survey(username):
             try:
                 # Change values in database
                 database.execute(
-                    "UPDATE user SET sex = ?, race = ?, age = ?, feet = ?, inches = ?, userid = ?,"
+                    "UPDATE user SET sex = ?, race = ?, age = ?, feet = ?, inches = ?,"
                     "current_weight = ?, target_weight = ?, weight_circum = ?, neck_circum = ?, body_comp = ? "
                     "WHERE username = ?",
-                    (sex, race, age, feet, inches, userid, current_weight, target_weight, weight_circum, neck_circum,
+                    (sex, race, age, feet, inches, current_weight, target_weight, weight_circum, neck_circum,
                      body_comp, g.user['username'])
                 )
                 database.commit()
@@ -195,13 +180,13 @@ def patient_survey(username):
 
 @bp.before_app_request
 def load_logged_in_user():
-    username = session.get('username')
+    userid = session.get('userid')
 
-    if username is None:
+    if userid is None:
         g.user = None
     else:
         g.user = get_database().execute(
-            'SELECT * FROM user WHERE id = ?', (username,)
+            "SELECT * FROM user WHERE userid = ?", (userid,)
         ).fetchone()
 
 
