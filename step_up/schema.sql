@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE user
 (
-    username       TEXT NOT NULL ,
+    username       TEXT NOT NULL,
     password       TEXT NOT NULL,
     email          TEXT NOT NULL,
     picture        BLOB,
@@ -17,5 +17,8 @@ CREATE TABLE user
     weight_circum  INTEGER NOT NULL,
     neck_circum    INTEGER NOT NULL,
     body_comp      INTEGER NOT NULL,
-    steps          INTEGER NOT NULL
+    steps          INTEGER NOT NULL,
+    steps_per_day  INTEGER NOT NULL,
+    role           INTEGER NOT NULL,
+    start_date     TEXT NOT NULL
 );

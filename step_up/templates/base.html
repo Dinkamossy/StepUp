@@ -55,7 +55,15 @@ body {
                         color:white; font-weight: bold;">Survey</a>
                 </li>
                 <li style="display:inline-block;">
+                    <a class="nav-link" href="{{ url_for('auth.my_account') }}"style="text-decoration:none;
+                        color:white; font-weight: bold;">Account</a>
+                </li>
+                <li style="display:inline-block;">
                     <a class="nav-link" href="{{ url_for('auth.logout') }}"style="text-decoration:none;
+                        color:white; font-weight: bold;">Log Out</a>
+                </li>
+                <li style="display:inline-block;">
+                    <a class="nav-link" href="{{ url_for('auth.help_page') }}"style="text-decoration:none;
                         color:white; font-weight: bold;">Log Out</a>
                 </li>
                 <li style="display:inline-block;">

@@ -72,7 +72,7 @@ def register():
             else:
                 return redirect(url_for("auth.patient_survey"))
         flash(error)
-    return redirect(url_for('mainpage'))
+    return render_template('auth/register.html')
 
 
 @bp.route('/login', methods=('GET', 'POST'))
@@ -105,7 +105,7 @@ def login():
 
 @bp.route('/patient_survey', methods=('GET', 'POST'))
 @login_required
-def patient_survey(username):
+def patient_survey():
     """
     Allows users to enter their information into the database
     """
@@ -161,9 +161,9 @@ def patient_survey(username):
                 database.execute(
                     "UPDATE user SET sex = ?, race = ?, age = ?, feet = ?, inches = ?,"
                     "current_weight = ?, target_weight = ?, weight_circum = ?, neck_circum = ?, body_comp = ? "
-                    "WHERE username = ?",
+                    "WHERE userid = ?",
                     (sex, race, age, feet, inches, current_weight, target_weight, weight_circum, neck_circum,
-                     body_comp, g.user['username'])
+                     body_comp, g.user['userid'])
                 )
                 database.commit()
             # Catch any errors
@@ -171,10 +171,10 @@ def patient_survey(username):
                     database.IntegrityError):
                 error = f"Unable to update survey"
             else:
-                return redirect(url_for("auth.login"))
-    # Tell the user it worked
-    flash("Info updated!")
-    return redirect(url_for('mainpage'))
+                return redirect(url_for('mainpage'))
+                # Tell the user it worked
+                flash("Info updated!")
+    return render_template('auth/patient_survey.html')
 
 
 @bp.route('/my_account', methods=('GET', 'POST'))
@@ -183,7 +183,6 @@ def my_account():
     """
      View to allow a user to edit information about their account (change password, upload photo, etc.)
      """
-
     if request.method == 'POST':
         # Get handle on DB
         database = get_database()
@@ -220,13 +219,15 @@ def my_account():
             database.commit()
         else:
             database.execute(
-                "UPDATE users SET email_address = ?, first_name = ?, last_name = ?, address = ? WHERE userid = ?",
+                "UPDATE users SET email_address = ?, username = ?, address = ? WHERE userid = ?",
                 (email, username, g.user['userid'])
             )
             database.commit()
         # Tell the user it worked
         flash("Profile updated!")
         return redirect(url_for('auth.my_account'))
+    return render_template("auth/my_account.html")
+
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -255,3 +256,13 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+@bp.route('/help_page')
+def help_page():
+    """
+    View the help page selected from the page header
+    """
+
+    # Load the help page
+    return render_template('auth/help.html')

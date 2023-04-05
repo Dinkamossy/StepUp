@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-first">
+                <div class="personal details">
+                    <div class="fields">
+                        <div class="input-field">
+                            <label for="username">Username</label>
+                            <input name="username" id="username" required value="{{ g.user['username'] }}">
+                        </div>
+                        <div class="input-field">
+                            <label for="email_address">Email Address</label>
+                            <input name="email_address" id="email_address" required
+                                   value="{{ g.user['email'] }}">
+                        </div>
+                        <div class="input-field">
+                            <label for="DOB">Date of birth (YYYY-MM-DD)</label>
+                            <input name="DOB" id="DOB" required value="{{ g.user['age'] }}">
+                        </div>
+                        <div class="input-field" style="float: left">
+                            <label for="profile_pic" style="float: left">Profile picture</label>
+                            {% if g.user['picture'] %}
+                                <span><img class="picture"
+                                           src="data:image/png;base64, {{ g.user["picture"] | make_image }}"
+                                           id="userImage" style="width:100px;height:100px;margin-top: 20px;"
+                                           alt="User's profile picture"/></span>
+                            {% else %}
+                                <span><img class="picture" src="{{ url_for('static', filename='no_photo.png') }}"
+                                           style="width:100px;height:100px;margin-top: 20px;"
+                                           alt="Placeholder profile picture"/></span>
+                            {% endif %}
+                        </div>
+                        <div class="input-field">
+                            <label for="uploaded_pic">Upload new photo</label>
+                            <input class="file" type="file" name="uploaded_pic" id="uploaded_pic">
+                        </div>
+                        <div class="btn-group-vertical-justified" style="margin-bottom: 10px">
+                            <button data-toggle="tooltip" data-placement="top" title="Save changes made to user account"
+                                    type="submit" class="btn btn-secondary"
+                                    style="color: white; background-color: #F8C461">Save changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
