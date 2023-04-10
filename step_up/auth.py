@@ -174,7 +174,7 @@ def patient_survey(username):
                 return redirect(url_for("auth.login"))
     # Tell the user it worked
     flash("Info updated!")
-    return redirect(url_for('mainpage'))
+    return render_template('auth/patient_survey.html')
 
 
 @bp.route('/my_account', methods=('GET', 'POST'))
@@ -228,6 +228,7 @@ def my_account():
         flash("Profile updated!")
         return redirect(url_for('auth.my_account'))
 
+
 @bp.before_app_request
 def load_logged_in_user():
     userid = session.get('userid')
@@ -255,3 +256,43 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
+@login_required
+@bp.route('/base.html', methods=('GET', 'POST'))
+def steps_calculator(sex, current_weight, target_weight, body_comp):
+    if request.method == 'GET':
+        # Get handle on DB
+        database = get_database()
+        # Get info from the database ???
+        sex = "Select sex FROM user where sex = ?".format(sex)
+        current_weight = "Select current_weight FROM user where current_weight = ?".format(current_weight)
+        target_weight = "Select target_weight FROM user where current_weight = ?".format(target_weight)
+        body_comp = "Select target_weight FROM user where current_weight = ?".format(body_comp)
+        # calculates the target weight loss
+        target_weight_loss = (current_weight - target_weight) / 2.205
+        # converts current weight lbs to kgs
+        current_weight = current_weight / 2.205
+        #target weight in kg
+        target_weight_kg = current_weight - target_weight_loss
+        # calculates the current fat mass
+        current_fatmass = (body_comp * 0.01) * current_weight
+        current_fatfree_mass = current_weight - current_fatmass
+        new_fat_mass = current_fatmass - target_weight_loss
+        target_bodyfat = (new_fat_mass / target_weight_kg) * 100
+
+        if sex == 'Female':
+            power_regression = 261425.4 / (target_bodyfat ** 1.8797)
+            daily_steps = power_regression * current_fatmass
+        else:
+            power_regression = 39377.34 / (target_bodyfat ** 1.3405)
+            daily_steps = power_regression * current_fatmass
+
+    #adds value to the database ???
+    database.execute("INSERT INTO user (steps) VALUES (%s)" % (daily_steps))
+    database.commit()
+
+    #displays the value to the page ????
+    display = database.execute('SELECT steps FROM user').fetchall()
+
+    return render_template('auth/base.html', display=sex)

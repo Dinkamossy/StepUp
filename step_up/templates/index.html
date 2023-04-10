@@ -21,6 +21,8 @@ a:link {
     {% if g.user %}
         <div>
             <p style="text-align: center; font-weight: bolder; color: white">Welcome Back!</p>
+            <<!-- to show the steps-->
+            <p>Your daily steps are {{display}}</p>
         </div>
     {% else %}
         <div class = "Welcome-text">
