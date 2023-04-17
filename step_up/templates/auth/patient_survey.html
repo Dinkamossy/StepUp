@@ -29,14 +29,34 @@ input [type="radio"]:checked + label:before {
 
 <script>
 function errorMessage() {
-        var error = document.getElementById("error")
+        var error = document.getElementById("error");
+
+
+
+
+        var radio1 = document.querySelector(
+                'input[name="Sex"]:checked');
+
+
+        var radio2 = document.querySelector(
+                'input[name="Race"]:checked');
+
+
+
+
         var a= document.getElementById("Age").value;
           var b= document.getElementById("Feet").value;
              var c= document.getElementById("Inches").value;
               var d= document.getElementById("userid").value;
+               var e= document.getElementById("current_weight").value;
+               var f= document.getElementById("target_weight").value;
+               var g= document.getElementById("target_weight").value;
+                var h= document.getElementById("weight_circum").value;
+               var i = document.getElementById("neck_circum").value;
+               var j = document.getElementById("body_comp").value;
 
 
-       if (a.length==0 && b.length==0 &&  c.length==0 && d.length==0){
+       if (a.length==0 || b.length==0 ||  c.length==0 || d.length==0 || e.length==0 ||f.length==0 ||g.length==0 || h.length==0 || i.length==0 || j.length==0){
          error.textContent = "Please fill out all fields."
             error.style.color = "red"
          } else if ( a<19 || a>40)
@@ -56,8 +76,41 @@ function errorMessage() {
         } else if (d=="0000000"){
         error.textContent = "Please enter an accurate user id."
             error.style.color = "red"
-         }else {
+         }else if(e>=900){
+
+           error.textContent = "Please enter an accurate weight."
+            error.style.color = "red"
+
+         } else if(f>=900 || f>=e){
+                error.textContent = "Please enter a target weight that is accurate and lower then the current weight."
+            error.style.color = "red"
+
+         } else if(h>50){
+           error.textContent = "Please enter an accurate weight circumference"
+           error.style.color = "red"
+
+         }else if (i>26){
+
+          error.textContent = "Please enter an accurate neck circumference"
+           error.style.color = "red"
+
+         } else if (j>100){
+         error.textContent = "Please enter an accurate body composition percentage"
+         error.style.color = "red"
+
+         } else if(radio1 == null){
+
+          error.textContent = "Please choose a sex"
+         error.style.color = "red"
+
+          }else if (radio2==null){
+
+            error.textContent = "Please choose a race"
+         error.style.color = "red"
+
+          }else {
             error.textContent = ""
+
             window.open("/auth/login");
         }
     }
@@ -221,7 +274,8 @@ function errorMessage() {
 outline:none;">
         <br>
         <br>
-         <span id="error" style = "margin-left:580px; font-weight:bold; font-size: 15px;"></span>
+         <span id="error" style = "margin-left:680px; font-weight:bold; font-size: 15px;"></span>
+
     </form>
 <br>
 <br>
