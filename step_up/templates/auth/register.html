@@ -86,11 +86,13 @@ form .fields .input-field{
   position: relative;
   padding: 10px;
   margin-top: 10px;
+
 }
 
 #message p {
-  padding: 5px 35px;
-  font-size: 18px;
+  padding: 5px 25px;
+  font-size: 10px;
+
 }
 
 /* Add a green text color and a checkmark when the requirements are right */
@@ -186,6 +188,15 @@ form .fields .input-field{
                         <input type="password" name="password" placeholder="Enter password" id="password"
                                title="Must start with a letter, contain at least one number and one special character and have at least 8 or more characters" required>
                     </div>
+
+        <div id="message" style="color:#000000">
+            <h3 id ="label1">Password must contain the following:</h3>
+            <p id="length" class="invalid">A <b>minimum of 7 characters</b></p>
+            <p id="letter" class="invalid">Must <b>start with a letter</b> </p>
+            <p id="alphabet" class="invalid"><b>Must have a letter</b></p>
+            <p id="number" class="invalid">At least <b>1 number </b></p>
+            <p id="specialChar" class="invalid">At least <b>1 special character from this list: !@#$%^&*</b></p>
+        </div>
                     <div class = "input-field">
                         <label for="email_address" >Email Address</label><br>
                         <input name="email_address" type ="email" placeholder="Enter email address" id="email_address" required>
@@ -193,14 +204,7 @@ form .fields .input-field{
                     <input class = "submit" type="submit" value="Create" >
 
 
-        <div id="message" style="color:#185DFF">
-            <h3>Password must contain the following:</h3>
-            <p id="length" class="invalid">A <b>minimum of 7 characters</b></p>
-            <p id="letter" class="invalid">Must <b>start with a letter</b> </p>
-            <p id="alphabet" class="invalid"><b>Must have a letter</b></p>
-            <p id="number" class="invalid">At least <b>1 number </b></p>
-            <p id="specialChar" class="invalid">At least <b>1 special character from this list: !@#$%^&*</b></p>
-        </div>
+
         <div>
             <p style="text-align: center; font-weight: bolder; color: white">Already have an account? </p>
             <a href="{{ url_for('auth.login') }}" style="text-decoration: none; font-size: 14px; line-height: 10px;

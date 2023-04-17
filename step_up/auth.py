@@ -72,7 +72,7 @@ def register():
             else:
                 return redirect(url_for("auth.patient_survey"))
         flash(error)
-    return redirect(url_for('mainpage'))
+    return render_template('auth/patient_survey.html')
 
 
 @bp.route('/login', methods=('GET', 'POST'))

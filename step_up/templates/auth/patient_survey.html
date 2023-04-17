@@ -1,33 +1,228 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Survey{% endblock %}</h1>
+
+
+  <h1 style = "font-size: 45px; margin-left: 480px;">{% block title %}Please complete this survey{% endblock %}</h1>
 {% endblock %}
 
+
+
 {% block content %}
-    <form method="post">
-        <label for="Sex">Sex</label>
-        <input name="Sex" id="Sex" required>
-        <label for="Race">Race</label>
-        <input name="Race" id="Race" required>
-            <label for="Age">Age</label>
-        <input name="Age" id="Age" required>
-            <label for="Feet">Feet</label>
-        <input name="Feet" id="Feet" required>
-            <label for="Inches">Inches</label>
-        <input name="Inches" id="Inches" required>
-            <label for="userid">User ID</label>
-        <input name="userid" id="userid" required>
-            <label for="current_weight">Current Weight</label>
-        <input name="current_weight" id="current_weight" required>
-            <label for="target_weight">Target Weight</label>
-        <input name="target_weight" id="target_weight" required>
-            <label for="weight_circum">Weight Circumference</label>
-        <input name="weight_circum" id="weight_circum" required>
-            <label for="neck_circum">Neck Circumference</label>
-        <input name="neck_circum" id="neck_circum" required>
-            <label for="body_comp">Body Composition</label>
-        <input name="body_comp" id="body_comp" required>
-        <input type="submit" value="Register">
+
+<style>
+
+
+
+
+input [type="radio"]:checked + label:before {
+    border: 1px solid #0086D6;
+
+
+
+
+}
+
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+function errorMessage() {
+        var error = document.getElementById("error")
+        var a= document.getElementById("Age").value;
+          var b= document.getElementById("Feet").value;
+             var c= document.getElementById("Inches").value;
+              var d= document.getElementById("userid").value;
+
+
+       if (a.length==0 && b.length==0 &&  c.length==0 && d.length==0){
+         error.textContent = "Please fill out all fields."
+            error.style.color = "red"
+         } else if ( a<19 || a>40)
+        {
+
+
+            error.textContent = "You must be between the age of 19-40 in order to use this program."
+            error.style.color = "red"
+        } else if (b<=1||b>9){
+         error.textContent = "Please enter an accurate height."
+            error.style.color = "red"
+
+        } else if (c==0||c>11){
+         error.textContent = "Please enter an accurate height."
+            error.style.color = "red"
+
+        } else if (d=="0000000"){
+        error.textContent = "Please enter an accurate user id."
+            error.style.color = "red"
+         }else {
+            error.textContent = ""
+            window.open("/auth/login");
+        }
+    }
+
+
+</script>
+<br>
+
+    <form  method="POST" >
+        <div id="rec1" style = "border: 1px solid white; background: white;height: 144px;width: 1408px; border-radius: 30px;margin-left:17px;">
+        <label  style = "color: black; margin-left: 20px; font-weight: bold;font-size: 30px;">Sex</label>
+        <br>
+            <br>
+            <br>
+
+            <div id = "options"   style = "margin-left: 130px; margin-top: -20px;">
+
+             <label class="radio-inline">
+        <input  type = "radio" name="Sex" id="Male" value = "Male" style = "margin-right: 20px; transform: scale(2); accent-color:#629E96;" >
+            <label for="Male" style = "color:black; font-size:15px; margin-right: 440px;">Male</label><br>
+             </label>
+
+             <label class="radio-inline">
+            <input  type = "radio" name="Sex" id="Female" value = "Female" style = "margin-right: 20px; transform: scale(2); accent-color:#629E96;" >
+            <label for="Female" style = "color:black; font-size:15px;margin-right: 440px;">Female</label><br>
+             </label>
+
+             <label class="radio-inline">
+              <input  type = "radio" name="Sex" id="Other" value = "Other" style = "margin-right: 20px; transform: scale(2); accent-color:#629E96; " >
+            <label for="Other" style = "color:black; font-size:15px;">Other</label><br>
+             </label>
+
+                </div>
+            </div>
+
+        <br>
+        <br>
+        <br>
+
+        <div id="rec2" style = "border: 1px solid white; background: white;height: 144px;width: 1408px; border-radius: 30px;margin-left:17px; margin-top: -60px;">
+         <label  style = "color: black; margin-left: 20px; font-weight: bold;font-size: 30px;">Race</label>
+        <br>
+            <br>
+            <br>
+
+            <div id = "options2" style = "margin-left: 35px; margin-top: -20px;">
+
+             <label class="radio-inline">
+        <input type = "radio" name="Race" id="Hispanic" value = "Hispanic" style = "margin-right: 10px; transform: scale(2); accent-color:#629E96;" >
+            <label for="Hispanic" style = "color:black; font-size:15px; margin-right: 50px;">Hispanic or Latino</label><br>
+             </label>
+
+             <label class="radio-inline">
+            <input type = "radio" name="Race" id="Indian" value = "Indian" style = "margin-right: 10px; transform: scale(2); accent-color:#629E96;" >
+            <label for="Indian" style = "color:black; font-size:15px;margin-right: 50px;">American Indian or Alaska Native</label><br>
+             </label>
+
+             <label class="radio-inline">
+              <input type = "radio" name="Race" id="Asian" value = "Asian" style = "margin-right: 10px; transform: scale(2); accent-color:#629E96; " >
+            <label for="Asian" style = "color:black; font-size:15px; margin-right: 50px;">Asian</label><br>
+             </label>
+
+                <label class="radio-inline">
+              <input type = "radio" name="Race" id="Black" value = "Black" style = "margin-right: 10px; transform: scale(2); accent-color:#629E96; " >
+            <label for="Black" style = "color:black; font-size:15px; margin-right: 50px;">Black or African American</label><br>
+             </label>
+
+                 <label class="radio-inline">
+              <input type = "radio" name="Race" id="Hawaiian" value = "Hawaiian" style = "margin-right: 10px; transform: scale(2); accent-color:#629E96; " >
+            <label for="Hawaiian" style = "color:black; font-size:15px; margin-right: 50px;">Native Hawaiian or Other Pacific Islander</label><br>
+             </label>
+
+                   <label class="radio-inline">
+              <input type = "radio" name="Race" id="White" value = "White" style = "margin-right: 10px; transform: scale(2); accent-color:#629E96; " >
+            <label for="White" style = "color:black; font-size:15px;">White</label><br>
+             </label>
+
+                </div>
+
+
+            </div>
+
+         <br>
+        <br>
+        <br>
+
+          <div id="rec3" style = "border: 1px solid white; background: white;height: 144px;width: 1408px; border-radius: 30px;margin-left:17px; margin-top: -60px;">
+               <label  style = "color: black; margin-left: 20px; font-weight: bold;font-size: 30px;">Age, Height, and User ID</label>
+        <br>
+            <br>
+            <br>
+
+            <div id = "options3" style = "margin-left: 175px; margin-top: -20px;">
+
+
+              <label for="Age" style = "color:black; font-size:15px; margin-right: 15px; font-weight: bold;">Age:</label>
+
+        <input  type = "number" min="1" name="Age" id="Age" required style = "border: solid black 1px; width: 80px; margin-right: 50px;">
+ <label style = "color:black; font-size:15px; margin-left: -40px"> years old</label>
+
+        <label style = "color:black; font-size:15px; margin-left: 60px; font-weight: bold;">Height:</label>
+
+            <label for="Feet" style = "color:black; font-size:15px; margin-left: 30px; margin-right: 15px; ">Feet</label>
+        <input name="Feet" id="Feet" required style = "border: solid black 1px; margin-right: 50px;width: 80px;">
+            <label for="Inches" style = "color:black; font-size:15px;  margin-left: 30px;margin-right: 15px; ">Inches</label>
+        <input  name="Inches" id="Inches" required style = "border: solid black 1px;margin-right: 50px;width: 80px;">
+            <label for="userid" style = "color:black; font-size:15px;  margin-left: 30px; margin-right: 15px; font-weight: bold;">User ID:</label>
+        <input   name="userid" id="userid" required style = "border: solid black 1px; margin-right: 50px;width: 150px;">
+             </div>
+          </div>
+
+         <br>
+        <br>
+        <br>
+
+        <div id="rec4" style = "border: 1px solid white; background: white;height: 144px;width: 1408px; border-radius: 30px;margin-left:17px; margin-top: -60px;">
+               <label  style = "color: black; margin-left: 20px; font-weight: bold;font-size: 30px;">Current Weight and Target Weight</label>
+        <br>
+            <br>
+            <br>
+
+            <div id = "options4" style = "margin-left: 175px; margin-top: -20px;">
+
+            <label for="current_weight" style = "color:black; font-size:15px; margin-right: 15px; font-weight: bold;" >Current Weight:</label>
+        <input  name="current_weight" id="current_weight" required style = "border: solid black 1px; width: 80px; margin-right: 50px;">
+                 <label style = "color:black; font-size:15px; margin-left: -40px">lbs</label>
+            <label for="target_weight" style = "color:black; font-size:15px;  margin-left: 550px; margin-right: 15px; font-weight: bold;">Target Weight:</label>
+        <input  name="target_weight" id="target_weight" required style = "border: solid black 1px; margin-right: 50px;width: 80px;">
+                 <label style = "color:black; font-size:15px; margin-left: -40px">lbs</label>
+
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        <div id="rec5" style = "border: 1px solid white; background: white;height: 144px;width: 1408px; border-radius: 30px;margin-left:17px; margin-top: -60px;">
+               <label  style = "color: black; margin-left: 20px; font-weight: bold;font-size: 30px;">Weight Circumference, Neck Circumference, and Body Composition </label>
+        <br>
+            <br>
+            <br>
+
+            <div id = "options5" style = "margin-left: 175px; margin-top: -20px;">
+            <label for="weight_circum" style = "color:black; font-size:15px; margin-right: 15px; font-weight: bold;">Weight Circumference</label>
+        <input  name="weight_circum" id="weight_circum" required style = "border: solid black 1px; width: 80px; margin-right: 50px;">
+                  <label style = "color:black; font-size:15px; margin-left: -40px">in</label>
+            <label for="neck_circum" style = "color:black; font-size:15px; margin-left: 100px;margin-right: 15px; font-weight: bold;">Neck Circumference</label>
+        <input  name="neck_circum" id="neck_circum" required style = "border: solid black 1px; width: 80px; margin-right: 50px;">
+                  <label style = "color:black; font-size:15px; margin-left: -40px">in</label>
+            <label for="body_comp" style = "color:black; font-size:15px;  margin-left: 100px; margin-right: 15px; font-weight: bold;">Body Composition</label>
+        <input  name="body_comp" id="body_comp" required style = "border: solid black 1px; margin-right: 50px;width: 80px;">
+                  <label style = "color:black; font-size:15px; margin-left: -40px">%</label>
+
+            </div>
+        </div>
+
+        <br>
+
+        <input type="button"  onclick = "errorMessage()" value="Register" style = "background-color: #ED9F57;  border-radius: 30px; width: 150px; height: 60px; font-size: 20px;color: white; margin-left: 680px;border: none;
+outline:none;">
+        <br>
+        <br>
+         <span id="error" style = "margin-left:580px; font-weight:bold; font-size: 15px;"></span>
     </form>
+<br>
+<br>
 {% endblock %}
