@@ -20,7 +20,7 @@ a:link {
 {% block content %}
     {% if g.user %}
         <div>
-            <h1 style="text-align: center; font-weight: bolder; color: white">Welcome Back!</h1><br>
+            <h1 style="text-align: center; font-weight: bolder; color: white">Welcome Back, {{ g.user['username'] }}!</h1><br>
             <h1 id="out" style="text-align: center; font-size: 170px; font-weight: lighter; color: white"></h1>
             <p style="text-align: center; font-weight: bolder; color: white">steps per day</p>
         </div>

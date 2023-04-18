@@ -12,20 +12,20 @@
                             <input name="username" id="username" required value="{{ g.user['username'] }}">
                         </div>
                         <div class="input-field">
-                            <label for="email_address">Email Address</label>
-                            <input name="email_address" id="email_address" required
+                            <label for="email">Email Address</label>
+                            <input name="email" id="email" required
                                    value="{{ g.user['email'] }}">
                         </div>
                         <div class="input-field">
-                            <label for="DOB">Age of User</label>
-                            <input name="DOB" id="DOB" required value="{{ g.user['age'] }}">
+                            <label for="age">Age of User</label>
+                            <input name="age" id="age" required value="{{ g.user['age'] }}">
                         </div>
                         <div class="input-field" style="float: left">
-                            <label for="profile_pic" style="float: left">Profile picture</label>
+                            <label for="picture" style="float: left">Profile picture</label>
                             {% if g.user['picture'] %}
                                 <span><img class="picture"
                                            src="data:image/png;base64, {{ g.user["picture"] | make_image }}"
-                                           id="userImage" style="width:100px;height:100px;margin-top: 20px;"
+                                           id="picture" style="width:100px;height:100px;margin-top: 20px;"
                                            alt="User's profile picture"/></span>
                             {% else %}
                                 <span><img class="picture" src="{{ url_for('static', filename='no_photo.png') }}"
@@ -34,8 +34,8 @@
                             {% endif %}
                         </div>
                         <div class="input-field">
-                            <label for="uploaded_pic">Upload new photo</label>
-                            <input class="file" type="file" name="uploaded_pic" id="uploaded_pic">
+                            <label for="picture">Upload new photo</label>
+                            <input class="file" type="file" name="picture" id="picture">
                         </div>
                         <div class="btn-group-vertical-justified" style="margin-bottom: 10px">
                             <button data-toggle="tooltip" data-placement="top" title="Save changes made to user account"

@@ -43,7 +43,7 @@ def send_approval(username, email):
     endpoint = url_for('auth.login')
     # Content to be sent in the email
     message = f"Hello {username},<br><br>Your new account on Step Up has been activated!" \
-              f"<br><br><a href='{SITE_URL}{endpoint}'>Click here to log in.</a>" \
+              f"<br><br><a href='{endpoint}'>Click here to log in.</a>" \
               f"<br><br>Regards," \
               f"<br><br>Step Up Team"
 

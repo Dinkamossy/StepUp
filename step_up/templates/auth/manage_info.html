@@ -4,7 +4,7 @@
 <html lang="en">
 <style>
     h1, h3 {
-        background-color: #CFCFCF;
+        background-color: black;
         color: #639AAB;
     }
 </style>
@@ -15,54 +15,74 @@
 <body>
 {% block content %}
     <div class="h1-h3">
-        <h1>User management</h1>
+        <h1>Patient management</h1>
         <h3>Current users:</h3>
     </div>
     <div style="overflow-x:auto; margin-top: -7px">
         <table class="table table-light table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
             <tr class="table-header">
                 <th style="border:1px solid black">Username</th>
-                <th style="border:1px solid black">Email</th>
+                <th style="border:1px solid black">Sex</th>
+                <th style="border:1px solid black">Race</th>
+                <th style="border:1px solid black">Age</th>
+                <th style="border:1px solid black">Feet & Inches</th>
+                <th style="border:1px solid black">Current Weight (lbs)</th>
+                <th style="border:1px solid black">Target Weight (%)</th>
+                <th style="border:1px solid black">Weight Circumference</th>
+                <th style="border:1px solid black">Neck Circumference</th>
+                <th style="border:1px solid black">Body Fat Percentage</th>
+                <th style="border:1px solid black">Steps</th>
                 <th style="border:1px solid black">Role</th>
 
             </tr>
-            {% if users %}
+            {% if user %}
                 {% set row = namespace(counter = 0) %}
-                {% for user in users %}
+                {% for user in user %}
                     {% set row.counter = row.counter + 1 %}
-                <td>{{ user['first_name'] }} {{ user['last_name'] }}</td>
-                <td>{{ user['username'] }}</td>
+                    <tr>
+                    <td style="color:black">{{ user['username'] }}</td>
+                    <td style="color:black">{{ user['sex'] }}</td>
+                    <td style="color:black">{{ user['race'] }}</td>
+                    <td style="color:black">{{ user['age'] }}</td>
+                    <td style="color:black">{{ user['feet'] }}'{{ user['inches'] }}</td>
+                    <td style="color:black">{{ user['current_weight'] }}</td>
+                    <td style="color:black">{{ user['target_weight'] }}</td>
+                    <td style="color:black">{{ user['weight_circum'] }}</td>
+                    <td style="color:black">{{ user['neck_circum'] }}</td>
+                    <td style="color:black">{{ user['body_fat_per'] }}</td>
+                    <td style="color:black">{{ user['steps'] }}</td>
 
-                {% if user['role'] == 1 %}
-                    <td>
-                        Admin
-                    </td>
-                {% else %}
-                    <td>
-                        User
-                    </td>
-                {% endif %}
-                {# <td style="background-color: white">
-                    <button data-toggle="tooltip" data-placement="top" title="Edit existing user account" type="button"
-                            style="display: block; margin: auto"
-                            onclick="window.location.href='{{ url_for('auth.edit_user', username=user['username']) }}'">
-                        Edit
-                    </button>
-                </td> #}
-                </tr>
+                    {% if user['role'] == 1 %}
+                        <td style="color:black">
+                            Admin
+                        </td>
+                    {% else %}
+                        <td style="color:black">
+                            User
+                        </td>
+                    {% endif %}
+
+                    </tr>
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td>No users found!</td>
+                    <td style="color:black">No users found!</td>
                 </tr>
             {% endif %}
 
         </table>
     </div>
-    <button data-toggle="tooltip" data-placement="top" title="Create a new user account" type="button"
-            style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #F89E19; color: white; border-radius: 6px; width: 150px"
-            onclick="window.location.href='{{ url_for('auth.register') }}'">Create user
-    </button>
+    <div class="d-flex justify-content-center">
+        <button data-toggle="tooltip" data-placement="top" title="Print a copy of the income statement" type="button"
+                style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #F89E19; color: white; border-radius: 6px; width: 200px"
+                onclick="alert('To save patient information, select Save as PDF from the Print dialog' ); window.print()">
+            Save/Print Patient Information
+        </button>
+        <button data-toggle="tooltip" data-placement="top" title="Create a new user account" type="button"
+                style="display: block; border-color: #F89E19; margin: auto; padding: 10px; background-color: #F89E19; color: white; border-radius: 6px; width: 150px"
+                onclick="window.location.href='{{ url_for('auth.register') }}'">Create New Patient
+        </button>
+    </div>
 {% endblock %}
 
 

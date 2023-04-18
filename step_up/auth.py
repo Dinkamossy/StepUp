@@ -210,7 +210,8 @@ def my_account():
         # Get the info from the form fields
         username = request.form['username']
         email = request.form['email']
-        uploaded_pic = request.files['uploaded_pic']
+        age = request.form['age']
+        uploaded_pic = request.files['picture']
         # Make sure a picture was supplied
         if uploaded_pic.filename:
             # Ensure that the pic uploaded is of the correct type
@@ -234,14 +235,14 @@ def my_account():
             # Save the new image in the database
             uploaded_pic = temp_buffer.getvalue()
             database.execute(
-                "UPDATE users SET picture = ?, email = ?, username = ? WHERE userid = ?",
-                (uploaded_pic, email, username, g.user['userid'])
+                "UPDATE user SET picture = ?, email = ?, username = ?, age = ? WHERE userid = ?",
+                (uploaded_pic, email, username, age, g.user['userid'])
             )
             database.commit()
         else:
             database.execute(
-                "UPDATE users SET email_address = ?, username = ?, address = ? WHERE userid = ?",
-                (email, username, g.user['userid'])
+                "UPDATE user SET email = ?, username = ?, age = ? WHERE userid = ?",
+                (email, username, age, g.user['userid'])
             )
             database.commit()
         # Tell the user it worked
@@ -265,7 +266,7 @@ def manage_info():
                 "SELECT * FROM user"
             ).fetchall()
             # Display them on the page
-        return render_template('auth/manage_info.html', users=user_list)
+        return render_template('auth/manage_info.html', user=user_list)
     else:
         abort(403)
 
