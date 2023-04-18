@@ -8,7 +8,7 @@ CREATE TABLE user
     picture        BLOB,
     sex            TEXT NOT NULL,
     race           TEXT NOT NULL,
-    age            TEXT NOT NULL,
+    age            INTEGER NOT NULL,
     feet           INTEGER NOT NULL,
     inches         INTEGER NOT NULL,
     userid         INTEGER PRIMARY KEY UNIQUE,
@@ -16,9 +16,8 @@ CREATE TABLE user
     target_weight  INTEGER NOT NULL,
     weight_circum  INTEGER NOT NULL,
     neck_circum    INTEGER NOT NULL,
-    body_comp      INTEGER NOT NULL,
+    body_fat_per   INTEGER NOT NULL,
     steps          INTEGER NOT NULL,
-    steps_per_day  INTEGER NOT NULL,
     role           INTEGER NOT NULL,
-    start_date     TEXT NOT NULL
+    survey_update  TEXT NOT NULL
 );

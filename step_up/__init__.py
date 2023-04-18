@@ -4,6 +4,8 @@ import flask
 import base64
 from flask import Flask, g
 
+from step_up import formula
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -36,6 +38,10 @@ def create_app(test_config=None):
 
     @app.route('/')
     def mainpage():
+        # Items for dashboard
+        if g.user:
+            steps = formula.get_steps(g.user['userid'])
+            return flask.render_template('index.html', steps=steps)
         return flask.render_template('index.html')
 
     @app.route('/login')

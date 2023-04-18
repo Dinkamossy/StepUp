@@ -51,25 +51,31 @@ body {
 
             <ul class="navbar-nav mr-right">
                 <li style="display:inline-block;">
-                    <a class="nav-link" href="{{ url_for('auth.patient_survey') }}"style="text-decoration:none;
+                    <a class="nav-link" href="{{ url_for('auth.patient_survey') }}" style="text-decoration:none;
                         color:white; font-weight: bold;">Survey</a>
                 </li>
                 <li style="display:inline-block;">
-                    <a class="nav-link" href="{{ url_for('auth.my_account') }}"style="text-decoration:none;
+                    <a class="nav-link" href="{{ url_for('auth.my_account') }}" style="text-decoration:none;
                         color:white; font-weight: bold;">Account</a>
                 </li>
                 <li style="display:inline-block;">
-                    <a class="nav-link" href="{{ url_for('auth.logout') }}"style="text-decoration:none;
-                        color:white; font-weight: bold;">Log Out</a>
+                    <a class="nav-link" href="{{ url_for('auth.help_page') }}" style="text-decoration:none;
+                        color:white; font-weight: bold;">FAQ</a>
                 </li>
                 <li style="display:inline-block;">
-                    <a class="nav-link" href="{{ url_for('auth.help_page') }}"style="text-decoration:none;
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}" style="text-decoration:none;
                         color:white; font-weight: bold;">Log Out</a>
                 </li>
-                <li style="display:inline-block;">
+                {% if g.user['role'] == 1 %}
+                    <li style="display:inline-block;">
+                        <a class="nav-link" href="{{ url_for('auth.manage_info') }}"style="text-decoration:none;
+                            color:white; font-weight: bold;">Manage Information</a>
+                    </li>
+                {% endif %}
+                {# <li style="display:inline-block;">
                     <div id="username" style="text-decoration:none;
-                        color:white; font-weight: bold;">{{ g.user['username'] }}</div>
-                </li>
+                        color:white; font-weight: bold;">{{ g.user['username'] }} </div>
+                </li> #}
                 <li style="display:inline-block;">
                     {% if g.user['picture'] %}
                         <img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"

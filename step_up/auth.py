@@ -3,12 +3,14 @@ import re
 from io import BytesIO
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 )
 from PIL import Image
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from step_up.database import get_database
+from step_up.formula import steps_calculator
+from step_up.email import send_approval
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -57,12 +59,13 @@ def register():
                 password = generate_password_hash(password)
                 database.execute(
                     "INSERT INTO user (username, email, password, sex, race, age, feet, inches, "
-                    "current_weight, target_weight, weight_circum, neck_circum, body_comp, steps) VALUES "
-                    "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (username, email, password, 'male', 'other', '01-01-2000', 0, 0, 0, 0, 0, 0, 0, 0)
+                    "current_weight, target_weight, weight_circum, neck_circum, body_fat_per, steps, role,"
+                    "survey_update) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (username, email, password, 'male', 'other', 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, today)
                 )
                 # Write the change to the database
                 database.commit()
+                send_approval(username, email)
                 flash('Account Created!')
 
             # Catch database errors
@@ -70,7 +73,7 @@ def register():
                     database.IntegrityError):
                 error = "Unexpected database issue."
             else:
-                return redirect(url_for("auth.patient_survey"))
+                return render_template('auth/login.html')
         flash(error)
     return render_template('auth/register.html')
 
@@ -120,60 +123,78 @@ def patient_survey():
         target_weight = request.form['target_weight']
         weight_circum = request.form['weight_circum']
         neck_circum = request.form['neck_circum']
-        body_comp = request.form['body_comp']
+        body_fat_per = request.form['body_fat_per']
 
         # Get a handle on the database and set error value
         database = get_database()
         error = None
 
-        # Verify Data todo(add more validation)
+        # Validate Data todo(add more validation)
         if not sex:
             error = 'Please enter your sex'
         if not race:
             error = 'Please enter your race'
         if not age:
             error = 'Please enter your date of birth'
-        elif age:
-            try:
-                correct_date = bool(datetime.strptime(age, "%m-%d-%Y"))
-            except ValueError:
-                correct_date = False
-            if not correct_date:
-                error = 'Date of birth must be formatted as MM-DD-YYYY'
+        # elif age:
+            #     if not isinstance(age, int):
+        #         error = 'Your age must be a number'
         if not feet:
             error = 'Please enter your feet in height'
+            # elif feet:
+            #     if not isinstance(feet, int):
+            #         error = 'Your height in feet must be a number'
         if not inches:
             error = 'Please enter your inches in height'
+            # elif inches:
+            #    if not isinstance(inches, int):
+            #        error = 'Your height in inches must be a number'
         if not current_weight:
-            error = 'Please enter your current weight'
+            error = 'Please enter your current weight in pounds (lb)'
+            # elif current_weight:
+            #   if not isinstance(current_weight, int):
+            #       error = 'Your current weight in pounds (lb) must be a number'
         if not target_weight:
             error = 'Please enter your target weight'
+            # elif target_weight:
+            #   if not isinstance(target_weight, int):
+            #       error = 'Your target weight in kilograms (kg) must be a number'
         if not weight_circum:
             error = 'Please enter your weight circumference'
+            # elif weight_circum:
+            #  if not isinstance(weight_circum, int):
+            #      error = 'Your weight circumference must be a number'
         if not neck_circum:
             error = 'Please enter your neck circumference'
-        if not body_comp:
+            # elif neck_circum:
+            # if not isinstance(neck_circum, int):
+            #      error = 'Your neck circumference must be a number'
+        if not body_fat_per:
             error = 'Please enter your body composition percent'
+            # elif body_fat_per:
+            #  if not isinstance(body_fat_per, int):
+            #      error = 'Your body fat percentage must be a number'
 
         if error is None:
             try:
                 # Change values in database
                 database.execute(
                     "UPDATE user SET sex = ?, race = ?, age = ?, feet = ?, inches = ?,"
-                    "current_weight = ?, target_weight = ?, weight_circum = ?, neck_circum = ?, body_comp = ? "
+                    "current_weight = ?, target_weight = ?, weight_circum = ?, neck_circum = ?, body_fat_per = ? "
                     "WHERE userid = ?",
                     (sex, race, age, feet, inches, current_weight, target_weight, weight_circum, neck_circum,
-                     body_comp, g.user['userid'])
+                     body_fat_per, g.user['userid'])
                 )
                 database.commit()
+                steps_calculator(g.user['userid'])
+                # Tell the user it worked
+                flash("Info updated!")
             # Catch any errors
             except (database.InternalError,
                     database.IntegrityError):
                 error = f"Unable to update survey"
             else:
                 return redirect(url_for('mainpage'))
-                # Tell the user it worked
-                flash("Info updated!")
     return render_template('auth/patient_survey.html')
 
 
@@ -227,6 +248,26 @@ def my_account():
         flash("Profile updated!")
         return redirect(url_for('auth.my_account'))
     return render_template("auth/my_account.html")
+
+
+@bp.route('/manage_users', methods=('GET',))
+@login_required
+def manage_info():
+    """
+    Allows administrators to manage users of the system
+    """
+    if g.user['role'] == 1:
+        user_list = None
+        if request.method == 'GET':
+            # Get all users from the DB
+            database = get_database()
+            user_list = database.execute(
+                "SELECT * FROM user"
+            ).fetchall()
+            # Display them on the page
+        return render_template('auth/manage_info.html', users=user_list)
+    else:
+        abort(403)
 
 
 @bp.before_app_request

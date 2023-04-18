@@ -2,6 +2,133 @@
 
 
 {% block content %}
+    <style>
+        .helpbox {
+            position: relative;
+            max-width: 900px;
+            width: 100%;
+            border-radius: 6px;
+            padding: 30px;
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #639AAB;
+        }
+
+        .helpbox form {
+            position: relative;
+            margin-top: 16px;
+            min-height: 400px;
+            background: goldenrod;
+        }
+
+        .helpbox h1 {
+            padding: 0;
+            text-align: center;
+            color: white;
+            font-size: x-large;
+        }
+
+        .helpbox p {
+            padding: 10px;
+            text-align: left;
+            color: white;
+            font-size: medium;
+        }
+
+        .collapsible {
+            background-color: goldenrod;
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .activate, .collapsible:hover {
+            background-color: #F8C461;
+        }
+
+        .collapsible:after {
+            content: '\02795'; /* Unicode character for plus */
+            font-size: 15px;
+            color: white;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .activate:after {
+            content: "\2715"; /* Unicode character for an X */
+        }
+
+        .storage {
+            padding: 0 18px;
+            background-color: #639AAB;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+
+    </style>
+    <div class=helpbox>
+        <h1>{% block title %}Step Up FAQ{% endblock %}</h1>
+
+        <br>
+        <h1>General Questions About Step Up</h1>
+        <button class="collapsible">What is Step Up?</button>
+        <div class="storage">
+            <p> Insert text here </p>
+        </div>
+        <br>
+        <button class="collapsible">Why use Step Up?</button>
+        <div class="storage">
+            <p> Insert text here </p>
+        </div>
+        <br><br>
+
+        <h1>Login Page</h1>
+        <button class="collapsible">General Information</button>
+        <div class="storage">
+            <p>All active users of Step Up come here to login and access their account by signing in with
+                their username and password.</p>
+        </div>
+
+        <br>
+        <button class="collapsible">Create New User Account</button>
+        <div class="storage">
+            <p>This link will redirect users to the Register page.</p>
+            <a href="{{ url_for('auth.register') }}" style="color:white">Click here to create a new user account.</a>
+        </div>
+        <br><br>
+
+        <h1>Register Page</h1>
+        <button class="collapsible">General Information</button>
+        <div class="storage">
+            <p>New users of Step Up set up their account here. All new users must enter their Username,
+                Password, and E-mail to create their personal account.</p>
+        </div>
+        <br><br>
+
+    </div>
 
 
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("activate");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
 {% endblock %}

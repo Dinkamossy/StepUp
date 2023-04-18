@@ -7,7 +7,7 @@ from flask import url_for
 
 from step_up.database import get_database
 
-EMAIL_PASSWORD = 'Pm6AFaRevudSt5N'
+EMAIL_PASSWORD = 'suipqerjjqrhyany'
 SENDER = 'noreply.stepup.ksu@gmail.com'
 SITE_URL = ''
 
@@ -35,24 +35,17 @@ def send_email(to, subject, message):
     # User: noreply.stepup.ksu@gmail.com   Pass: Pm6AFaRevudSt5N
 
 
-def send_approval(userid):
-    # Get a handle on the DB
-    db = get_database()
-    # Get user info
-    user = db.execute(
-        "SELECT * FROM users WHERE userid = ?", (userid,)
-    ).fetchone()
-
+def send_approval(username, email):
     # Email subject
     subject = 'Account created!'
 
     # Craft endpoint to be linked in the email
     endpoint = url_for('auth.login')
     # Content to be sent in the email
-    message = f"Hello {user['username']},<br><br>Your new account on Step Up has been activated!" \
+    message = f"Hello {username},<br><br>Your new account on Step Up has been activated!" \
               f"<br><br><a href='{SITE_URL}{endpoint}'>Click here to log in.</a>" \
               f"<br><br>Regards," \
               f"<br><br>Step Up Team"
 
-    send_email(user["email_address"], subject, message)
+    send_email(email, subject, message)
 

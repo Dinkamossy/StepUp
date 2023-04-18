@@ -20,7 +20,9 @@ a:link {
 {% block content %}
     {% if g.user %}
         <div>
-            <p style="text-align: center; font-weight: bolder; color: white">Welcome Back!</p>
+            <h1 style="text-align: center; font-weight: bolder; color: white">Welcome Back!</h1><br>
+            <h1 id="out" style="text-align: center; font-size: 170px; font-weight: lighter; color: white"></h1>
+            <p style="text-align: center; font-weight: bolder; color: white">steps per day</p>
         </div>
     {% else %}
         <div class = "Welcome-text">
@@ -28,6 +30,12 @@ a:link {
             <p style="text-align: center; font-weight: bolder; color: white">Lose weight through steps</p>
         </div>
     {% endif %}
+
+    <script>
+        const num = {{ steps }};
+        const result = num.toLocaleString('en-US');
+        document.getElementById("out").innerHTML = result;
+    </script>
 {%  endblock %}
 </body>
 
