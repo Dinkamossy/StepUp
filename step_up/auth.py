@@ -10,6 +10,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from step_up.database import get_database
 
+from flask_wtf import FlaskForm
+from wtforms.fields import DateField,IntegerField
+from wtforms.validators import DataRequired
+from wtforms import validators, SubmitField
+
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
@@ -266,3 +271,24 @@ def help_page():
 
     # Load the help page
     return render_template('auth/help.html')
+
+#steps input form
+class StepsForm(FlaskForm):
+    input_date = DateField('Date', format='%Y-%m-%d', validators=(validators.DataRequired(),))
+    input_steps = IntegerField('steps', validators=(validators.DataRequired(),))
+    submit = SubmitField('Submit')
+
+@bp.route('/enter_steps', methods=('GET', 'POST'))
+def enter_steps():
+    #calendar data entry
+    form = StepsForm()
+    # please enter these values to the database. You might need a separate class for the steps, there is a diagram in the design doc. about it c:
+    if form.validate_on_submit():
+        session['input_date'] = form.input_date.data
+        session['input_steps'] = form.input_steps.data
+
+    print(form.input_date.data)
+    print(form.input_steps.data)
+
+    # Load the enter steps page
+    return render_template('auth/enter_steps.html', form=form)

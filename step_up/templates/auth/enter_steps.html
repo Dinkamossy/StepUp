@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<body>
+<h3>Date:</h3>
+<form action="" method='POST' name="stepsform">
+     {{form.csrt_token}}
+    <div>{{form.input_date.label}} {{form.input_date(class='datepicker')}} {{form.hidden_tag()}}</div>
+    </div>{{form.input_steps.label}} {{form.input_steps()}}</div>
+    <p>
+    {{form.submit()}}
+    </p>
+</form>
+</body>
+
+{% endblock %}
