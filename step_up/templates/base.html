@@ -1,24 +1,150 @@
-<!doctype html>
-<title>{% block title %}{% endblock %} - Step Up</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
-  <h1>Step Up</h1>
-  <ul>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'style.css') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} - Step Up</title>
+    <link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+    </script>
+    <script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+    </script>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body {
+    background: #639AAB;
+    color: white;
+}
+
+.container header{
+    font-size : x-large;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+</style>
+
+{% if g.user %}
+<nav class="navbar sticky-top navbar-expand-lg navbar-light" style="background-color: #639AAB;"
+     style="position: relative; z-index: 999; overflow: visible">
+    <a class="navbar-brand" href={{ url_for('mainpage') }}> <img
+            src="{{ url_for('static', filename='logo.png') }}" width="400" height="75"
+            class="d-inline-block align-top" alt="Site logo">
+    </a>
     {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav ml-auto">
+                <li style="display:inline-block;">
+                    <a class="nav-link" href="{{ url_for('auth.patient_survey') }}" style="text-decoration:none;
+                        color:white; font-weight: bold;">Survey</a>
+                </li>
+                <li style="display:inline-block;">
+                    <a class="nav-link" href="{{ url_for('auth.my_account') }}" style="text-decoration:none;
+                        color:white; font-weight: bold;">Account</a>
+                </li>
+                <li style="display:inline-block;">
+                    <a class="nav-link" href="{{ url_for('auth.help_page') }}" style="text-decoration:none;
+                        color:white; font-weight: bold;">FAQ</a>
+                </li>
+                <li style="display:inline-block;">
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}" style="text-decoration:none;
+                        color:white; font-weight: bold;">Log Out</a>
+                </li>
+                {% if g.user['role'] == 1 %}
+                    <li style="display:inline-block;">
+                        <a class="nav-link" href="{{ url_for('auth.manage_info') }}"style="text-decoration:none;
+                            color:white; font-weight: bold;">Manage Information</a>
+                    </li>
+                {% endif %}
+                {# <li style="display:inline-block;">
+                    <div id="username" style="text-decoration:none;
+                        color:white; font-weight: bold;">{{ g.user['username'] }} </div>
+                </li> #}
+                <li style="display:inline-block;">
+                    {% if g.user['picture'] %}
+                        <img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"
+                                 class="rounded-circle" width="50" height="50" alt="User's profile picture"/>
+                    {% else %}
+                        <img src="{{ url_for('static', filename='no_photo.png') }}" class="rounded-circle"
+                                 width="50" height="50" alt="Placeholder profile picture"/>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+
     {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+                </li>
+
+            </ul>
+        </div>
     {% endif %}
-  </ul>
 </nav>
+{% else %}
+    {#  <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='logo.png') }}"
+                                                   style = "width: 400px;height: 75px;"  alt="StepUp logo"></a> #}
+    <ul style="text-align:right; margin:5px; padding:5px;">
+        <li style="display:inline-block;">
+            <a href="{{ url_for('auth.register') }}" style="text-decoration:none; color:white; font-weight: bold;">
+                <header>Register</header></a>
+        </li>
+        &nbsp;
+        <li style="display:inline-block;">
+            <a href="{{ url_for('auth.login') }}" style="text-decoration:none; color:white; font-weight: bold;">
+                <header>Log In</header></a>
+        </li>
+        &nbsp;
+        <li style="display:inline-block;">
+            <a href="{{ url_for('auth.help_page') }}" style="text-decoration:none; color:white; font-weight: bold;">
+                <header>FAQ</header></a>
+        </li>
+    </ul>
+
+{% endif %}
+
 <section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
+
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+    {% for message in get_flashed_messages() %}
+        <script>window.alert("{{ message }}")</script>
+    {% endfor %}
+    {% block content %}{% endblock %}
 </section>
+</html>

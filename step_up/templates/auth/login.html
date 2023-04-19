@@ -1,15 +1,105 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
+<style>
+  .loginbox{
+   position: relative;
+    max-width: 380px;
+    width: 80%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #639AAB;
+    border: 3px solid white;
+  }
+  .loginbox form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: #639AAB;
+}
+  .loginbox h1{
+    padding:0; text-align:center; color: white;
+  }
+  form label{
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+  }
+  form input{
+    width: 100%;
+    outline: none;
+    color: #333;
+    font-size: 14px;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: black;
+    height: 42px;
+    margin: 8px 0;
+  }
+  form .submit{
+        background-color: #F8C461;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 14px;
+  }
+  form a{
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 10px;
+    color: white;
+    display: block;
+    text-align:center;
+  }
+  form .checkbox{
+    width:auto;
+    float:left;
+
+  }
+  form .show{
+      margin-left: 2em;
+      color: white;
+      padding-left: -50px;
+      margin-bottom: 20px;
+
+  }
+
+</style>
+<div class = loginbox>
+    <h1>{% block title %}Log In{% endblock %}</h1>
   <form method="post">
     <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
+        <input name="username" id="username" placeholder="Enter username" required>
+    <label for="password" >Password</label>
+        <input type="password" name="password" placeholder="Enter password" id="password" required >
+    <input class = "checkbox"  type="checkbox" onclick="myFunction()"><div class = "show"></div>
+    <div style="overflow: hidden; padding: 0px 0px 0px 5px; color: white">
+             Show Password
+    </div>
+    <input class = "submit" type="submit" value="Log In">
+    <div>
+        <p style="text-align: center; font-weight: bolder; color: white">Don't have an account? </p>
+        <a href="{{ url_for('auth.register') }}" >Sign up here</a><br>
+    </div>
+      {# (for later) <a href="{{ url_for('auth.forgot_password') }}" >Forgot password?</a><br>#}
   </form>
+</div>
+<script>
+  function myFunction() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
 {% endblock %}
