@@ -1,6 +1,154 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <style>
+    *{
+        box-sizing: border-box;
+    }
+    body{
+    align-items:center;
+    justify-content: center;
+}
+.container{
+    position: relative;
+    max-width: 500px;
+    width: 80%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #639AAB;
+    border: 3px solid white;
+}
+.container header{
+    font-size : x-large;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+.container h1{
+    padding:0; text-align:center; color: white;
+  }
+.container form{
+    position: relative;
+    margin-top: 16px;
+    min-height: 400px;
+    background: #639AAB;
+}
+.container form .personal{
+    margin-top: 30px;
+}
+.container form .fields{
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+form .fields .input-field{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin: 4px 0;
+}
+.input-field label{
+   font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+.input-field input{
+    width: 100%;
+    outline: none;
+    color: #333;
+    font-size: 14px;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: black;
+    height: 42px;
+    margin: 8px 0;
+}
+.container form .submit{
+    background-color: #F8C461;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14px;
+}
+#message {
+  display:none;
+  background: #639AAB;
+  color: #000;
+  position: relative;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+#message p {
+  padding: 5px 35px;
+  font-size: 18px;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    position: relative;
+    max-width: 380px;
+    width: 90%;
+    border-radius: 6px;
+    padding: 30px;
+    margin-top: 10vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: black;
+  }
+    .container form{
+    position: relative;
+    margin-top:16px;
+    min-height: 400px;
+    background: black;
+}
+    .input-field label{
+        font-size: 14px;
+        font-weight: bold;
+        color: #639AAB;
+    }
+    .input-field input{
+        width: 100%;
+        outline: none;
+        color: #333;
+        font-size: 14px;
+        border: 3px solid white;
+        border-radius: 5px;
+        height: 42px;
+        margin: 8px 0;
+    }
+    form .fields .input-field{
+        display: block;
+        width: 100%;
+    }
+
+    .container form .fields{
+        display: block;
+        width: 100%
+    }
+    .container form .submit{
+        margin-left: 0px;
+        width: 100%;
+
+    }
+
+}
+@media screen and (max-width: 390px) {
+  .container {
+      margin-top: 10vh;
+  }}
+
+
+</style>
     <div class="container">
         <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
         <form method="post" enctype="multipart/form-data">
@@ -37,7 +185,7 @@
                             <label for="picture">Upload new photo</label>
                             <input class="file" type="file" name="picture" id="picture">
                         </div>
-                        <div class="btn-group-vertical-justified" style="margin-bottom: 10px">
+                        <div class="btn-group-vertical-justified" style="margin-bottom: 10px; text-align:center">
                             <button data-toggle="tooltip" data-placement="top" title="Save changes made to user account"
                                     type="submit" class="btn btn-secondary"
                                     style="color: white; background-color: #F8C461">Save changes

@@ -34,7 +34,7 @@ def register():
         # Get elements from form
         username = request.form['username']
         password: str = request.form['password']
-        email = request.form['email_address']
+        email = request.form['email']
 
         database = get_database()
         error = None
@@ -61,7 +61,7 @@ def register():
                     "INSERT INTO user (username, email, password, sex, race, age, feet, inches, "
                     "current_weight, target_weight, weight_circum, neck_circum, body_fat_per, steps, role,"
                     "survey_update) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (username, email, password, 'male', 'other', 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, today)
+                    (username, email, password, 'other', 'other', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, today)
                 )
                 # Write the change to the database
                 database.commit()
@@ -73,7 +73,7 @@ def register():
                     database.IntegrityError):
                 error = "Unexpected database issue."
             else:
-                return render_template('auth/login.html')
+                return redirect(url_for("auth.login"))
         flash(error)
     return render_template('auth/register.html')
 

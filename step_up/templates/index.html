@@ -24,6 +24,44 @@ a:link {
             <h1 id="out" style="text-align: center; font-size: 170px; font-weight: lighter; color: white"></h1>
             <p style="text-align: center; font-weight: bolder; color: white">steps per day</p>
         </div>
+        <br><br>
+        <div class="card">
+            <div class="card-body">
+                <h3 style="color: black; text-align: center;">Survey Inputs</h3>
+                <p style="color: black; text-align: center;">All user submitted information used to calculate this step count:
+                <table class="table table-light table-sm" style="height:110px; width:100%; border-bottom: 1px solid #F89E19">
+                    <tr class="table-header">
+                        <th style="border:1px solid black">Sex</th>
+                        <th style="border:1px solid black">Race</th>
+                        <th style="border:1px solid black">Age</th>
+                        <th style="border:1px solid black">Height</th>
+                        <th style="border:1px solid black">Current Weight (lbs)</th>
+                        <th style="border:1px solid black">Target Weight (%)</th>
+                        <th style="border:1px solid black">Weight Circumference</th>
+                        <th style="border:1px solid black">Neck Circumference</th>
+                        <th style="border:1px solid black">Body Fat Percentage</th>
+                    </tr>
+                    {% if user %}
+                        <tr>
+                            <td style="color:black">{{ user['sex'] }}</td>
+                            <td style="color:black">{{ user['race'] }}</td>
+                            <td style="color:black">{{ user['age'] }}</td>
+                            <td style="color:black">{{ user['feet'] }}'{{ user['inches'] }}</td>
+                            <td style="color:black">{{ user['current_weight'] }}</td>
+                            <td style="color:black">{{ user['target_weight'] }}</td>
+                            <td style="color:black">{{ user['weight_circum'] }}</td>
+                            <td style="color:black">{{ user['neck_circum'] }}</td>
+                            <td style="color:black">{{ user['body_fat_per'] }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td style="color:black">No data found!</td>
+                        </tr>
+                    {% endif %}
+
+                </table>
+            </div>
+        </div>
     {% else %}
         <div class = "Welcome-text">
             <a href = {{ url_for('mainpage') }} > <img src="{{ url_for('static', filename='StepUp.png') }}" style = "width: 750px; height: 500px;"  alt="StepUp logo"></a>

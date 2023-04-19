@@ -9,7 +9,7 @@ from step_up.database import get_database
 
 EMAIL_PASSWORD = 'suipqerjjqrhyany'
 SENDER = 'noreply.stepup.ksu@gmail.com'
-SITE_URL = ''
+# SITE_URL = ''
 
 
 def send_email(to, subject, message):
@@ -40,10 +40,10 @@ def send_approval(username, email):
     subject = 'Account created!'
 
     # Craft endpoint to be linked in the email
-    endpoint = url_for('auth.login')
+    # endpoint = url_for('auth.login')
     # Content to be sent in the email
     message = f"Hello {username},<br><br>Your new account on Step Up has been activated!" \
-              f"<br><br><a href='{endpoint}'>Click here to log in.</a>" \
+              f"<br><br>Thank you for using Step Up. We hope you enjoy your journey towards a healthier you." \
               f"<br><br>Regards," \
               f"<br><br>Step Up Team"
 

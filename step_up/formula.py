@@ -54,7 +54,15 @@ def get_steps(userid):
 
     steps = int(step['steps'])
 
-    if steps == 0:
-        steps = "Click on 'Survey' to calculate your steps!"
+    # if steps == 0:
+    #    steps = "Click on 'Survey' to calculate your steps!"
 
     return steps
+
+
+def get_user(userid):
+    database = get_database()
+    user = database.execute(
+        "Select * FROM user where userid = ?", (userid,)
+    ).fetchone()
+    return user

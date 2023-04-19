@@ -40,8 +40,9 @@ def create_app(test_config=None):
     def mainpage():
         # Items for dashboard
         if g.user:
+            user = formula.get_user(g.user['userid'])
             steps = formula.get_steps(g.user['userid'])
-            return flask.render_template('index.html', steps=steps)
+            return flask.render_template('index.html', steps=steps, user=user)
         return flask.render_template('index.html')
 
     @app.route('/login')
