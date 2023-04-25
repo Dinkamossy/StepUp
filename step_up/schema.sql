@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE user
 (
-    username       TEXT NOT NULL,
+    username       TEXT UNIQUE NOT NULL,
     password       TEXT NOT NULL,
     email          TEXT NOT NULL,
     picture        BLOB,
@@ -19,5 +19,6 @@ CREATE TABLE user
     body_fat_per   INTEGER NOT NULL,
     steps          INTEGER NOT NULL,
     role           INTEGER NOT NULL,
-    survey_update  TEXT NOT NULL
+    survey_update  TEXT NOT NULL,
+    account_create TEXT NOT NULL
 );

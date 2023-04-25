@@ -60,8 +60,8 @@ def register():
                 database.execute(
                     "INSERT INTO user (username, email, password, sex, race, age, feet, inches, "
                     "current_weight, target_weight, weight_circum, neck_circum, body_fat_per, steps, role,"
-                    "survey_update) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    (username, email, password, 'other', 'other', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, today)
+                    "survey_update, account_create) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (username, email, password, 'other', 'other', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, today, today)
                 )
                 # Write the change to the database
                 database.commit()
@@ -71,7 +71,7 @@ def register():
             # Catch database errors
             except (database.InternalError,
                     database.IntegrityError):
-                error = "Unexpected database issue."
+                error = "That Username is already in use. Please request a new Username."
             else:
                 return redirect(url_for("auth.login"))
         flash(error)
