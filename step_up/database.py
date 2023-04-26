@@ -2,6 +2,7 @@ import sqlite3
 
 import click
 from flask import current_app, g
+from step_up.__init__ import mysql
 
 
 def get_database():
@@ -13,6 +14,13 @@ def get_database():
         g.database.row_factory = sqlite3.Row
 
     return g.database
+
+
+def get_mysql():
+    if 'database' not in g:
+        g.conn = mysql.connect()
+
+    return g.conn.cursor()
 
 
 def close_database(e=None):

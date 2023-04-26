@@ -8,9 +8,10 @@ from flask import (
 from PIL import Image
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
-from step_up.database import get_database
+from step_up.database import get_mysql
 from step_up.formula import steps_calculator
 from step_up.email import send_approval
+from step_up.__init__ import mysql
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -36,7 +37,8 @@ def register():
         password: str = request.form['password']
         email = request.form['email']
 
-        database = get_database()
+        conn = mysql.connect()
+        database = conn.cursor()
         error = None
 
         # we need a limit on these two
@@ -60,11 +62,12 @@ def register():
                 database.execute(
                     "INSERT INTO user (username, email, password, sex, race, age, feet, inches, "
                     "current_weight, target_weight, weight_circum, neck_circum, body_fat_per, steps, role,"
-                    "survey_update, account_create) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "survey_update, account_create) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, "
+                    "%s, %s, %s, %s)",
                     (username, email, password, 'other', 'other', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, today, today)
                 )
                 # Write the change to the database
-                database.commit()
+                conn.commit()
                 send_approval(username, email)
                 flash('Account Created!')
 
@@ -83,22 +86,23 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        database = get_database()
+        database = get_mysql()
         error = None
-        user = database.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        database.execute(
+            'SELECT * FROM user WHERE username = %s', (username,)
+        )
+        user = database.fetchone()
 
         # If we are given a blank username, throw an error
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user[2], password):
             error = 'Incorrect password.'
 
         # generates cookies for the logged-in user
         if error is None:
             session.clear()
-            session['userid'] = user['userid']
+            session['userid'] = user[0]
             return redirect(url_for('mainpage'))
 
         flash(error)
@@ -126,7 +130,8 @@ def patient_survey():
         body_fat_per = request.form['body_fat_per']
 
         # Get a handle on the database and set error value
-        database = get_database()
+        conn = mysql.connect()
+        database = conn.cursor()
         error = None
 
         # Validate Data todo(add more validation)
@@ -179,14 +184,14 @@ def patient_survey():
             try:
                 # Change values in database
                 database.execute(
-                    "UPDATE user SET sex = ?, race = ?, age = ?, feet = ?, inches = ?,"
-                    "current_weight = ?, target_weight = ?, weight_circum = ?, neck_circum = ?, body_fat_per = ? "
-                    "WHERE userid = ?",
+                    "UPDATE user SET sex = %s, race = %s, age = %s, feet = %s, inches = %s,"
+                    "current_weight = %s, target_weight = %s, weight_circum = %s, neck_circum = %s, body_fat_per = %s "
+                    "WHERE userid = %s",
                     (sex, race, age, feet, inches, current_weight, target_weight, weight_circum, neck_circum,
-                     body_fat_per, g.user['userid'])
+                     body_fat_per, g.user[0])
                 )
-                database.commit()
-                steps_calculator(g.user['userid'])
+                conn.commit()
+                steps_calculator(g.user[0])
                 # Tell the user it worked
                 flash("Info updated!")
             # Catch any errors
@@ -206,7 +211,8 @@ def my_account():
      """
     if request.method == 'POST':
         # Get handle on DB
-        database = get_database()
+        conn = mysql.connect()
+        database = conn.cursor()
         # Get the info from the form fields
         username = request.form['username']
         email = request.form['email']
@@ -235,16 +241,16 @@ def my_account():
             # Save the new image in the database
             uploaded_pic = temp_buffer.getvalue()
             database.execute(
-                "UPDATE user SET picture = ?, email = ?, username = ?, age = ? WHERE userid = ?",
-                (uploaded_pic, email, username, age, g.user['userid'])
+                "UPDATE user SET picture = %s, email = %s, username = %s, age = %s WHERE userid = %s",
+                (uploaded_pic, email, username, age, g.user[0])
             )
-            database.commit()
+            conn.commit()
         else:
             database.execute(
-                "UPDATE user SET email = ?, username = ?, age = ? WHERE userid = ?",
-                (email, username, age, g.user['userid'])
+                "UPDATE user SET email = %s, username = %s, age = %s WHERE userid = %s",
+                (email, username, age, g.user[0])
             )
-            database.commit()
+            conn.commit()
         # Tell the user it worked
         flash("Profile updated!")
         return redirect(url_for('auth.my_account'))
@@ -257,14 +263,15 @@ def manage_info():
     """
     Allows administrators to manage users of the system
     """
-    if g.user['role'] == 1:
+    if g.user[16] == 1:
         user_list = None
         if request.method == 'GET':
             # Get all users from the DB
-            database = get_database()
-            user_list = database.execute(
+            database = get_mysql()
+            database.execute(
                 "SELECT * FROM user"
-            ).fetchall()
+            )
+            user_list = database.fetchall()
             # Display them on the page
         return render_template('auth/manage_info.html', user=user_list)
     else:
@@ -274,13 +281,15 @@ def manage_info():
 @bp.before_app_request
 def load_logged_in_user():
     userid = session.get('userid')
+    database = get_mysql()
 
     if userid is None:
         g.user = None
     else:
-        g.user = get_database().execute(
-            "SELECT * FROM user WHERE userid = ?", (userid,)
-        ).fetchone()
+        database.execute(
+            "SELECT * FROM user WHERE userid = %s", (userid,)
+        )
+        g.user = database.fetchone()
 
 
 @bp.route('/logout')

@@ -75,7 +75,7 @@ body {
                     <a class="nav-link" href="{{ url_for('auth.logout') }}" style="text-decoration:none;
                         color:white; font-weight: bold;">Log Out</a>
                 </li>
-                {% if g.user['role'] == 1 %}
+                {% if g.user[16] == 1 %}
                     <li style="display:inline-block;">
                         <a class="nav-link" href="{{ url_for('auth.manage_info') }}"style="text-decoration:none;
                             color:white; font-weight: bold;">Manage Information</a>
@@ -83,11 +83,11 @@ body {
                 {% endif %}
                 {# <li style="display:inline-block;">
                     <div id="username" style="text-decoration:none;
-                        color:white; font-weight: bold;">{{ g.user['username'] }} </div>
+                        color:white; font-weight: bold;">{{ g.user[1] }} </div>
                 </li> #}
                 <li style="display:inline-block;">
-                    {% if g.user['picture'] %}
-                        <img src="data:image/png;base64, {{ g.user["picture"] | make_image }}"
+                    {% if g.user[4] %}
+                        <img src="data:image/png;base64, {{ g.user[4] | make_image }}"
                                  class="rounded-circle" width="50" height="50" alt="User's profile picture"/>
                     {% else %}
                         <img src="{{ url_for('static', filename='no_photo.png') }}" class="rounded-circle"

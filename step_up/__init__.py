@@ -5,15 +5,21 @@ import base64
 from flask import Flask, g
 
 from step_up import formula
+from flaskext.mysql import MySQL
+mysql = MySQL()
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'stepUp.sqlite'),
+        SECRET_KEY='dev'
     )
+    app.config['MYSQL_DATABASE_USER'] = 'root'
+    app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
+    app.config['MYSQL_DATABASE_DB'] = 'stepup'
+    app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+    mysql.init_app(app)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -40,8 +46,8 @@ def create_app(test_config=None):
     def mainpage():
         # Items for dashboard
         if g.user:
-            user = formula.get_user(g.user['userid'])
-            steps = formula.get_steps(g.user['userid'])
+            user = formula.get_user(g.user[0])
+            steps = formula.get_steps(g.user[0])
             return flask.render_template('index.html', steps=steps, user=user)
         return flask.render_template('index.html')
 

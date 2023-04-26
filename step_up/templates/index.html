@@ -20,7 +20,7 @@ a:link {
 {% block content %}
     {% if g.user %}
         <div>
-            <h1 style="text-align: center; font-weight: bolder; color: white">Welcome Back, {{ g.user['username'] }}!</h1><br>
+            <h1 style="text-align: center; font-weight: bolder; color: white">Welcome Back, {{ g.user[1] }}!</h1><br>
             <h1 id="out" style="text-align: center; font-size: 170px; font-weight: lighter; color: white"></h1>
             <p style="text-align: center; font-weight: bolder; color: white">steps per day</p>
         </div>
@@ -43,15 +43,15 @@ a:link {
                     </tr>
                     {% if user %}
                         <tr>
-                            <td style="color:black">{{ user['sex'] }}</td>
-                            <td style="color:black">{{ user['race'] }}</td>
-                            <td style="color:black">{{ user['age'] }}</td>
-                            <td style="color:black">{{ user['feet'] }}'{{ user['inches'] }}</td>
-                            <td style="color:black">{{ user['current_weight'] }}</td>
-                            <td style="color:black">{{ user['target_weight'] }}</td>
-                            <td style="color:black">{{ user['weight_circum'] }}</td>
-                            <td style="color:black">{{ user['neck_circum'] }}</td>
-                            <td style="color:black">{{ user['body_fat_per'] }}</td>
+                            <td style="color:black">{{ user[5] }}</td>
+                            <td style="color:black">{{ user[6] }}</td>
+                            <td style="color:black">{{ user[7] }}</td>
+                            <td style="color:black">{{ user[8] }}'{{ user[9] }}</td>
+                            <td style="color:black">{{ user[10] }}</td>
+                            <td style="color:black">{{ user[11] }}</td>
+                            <td style="color:black">{{ user[12] }}</td>
+                            <td style="color:black">{{ user[13] }}</td>
+                            <td style="color:black">{{ user[14] }}</td>
                         </tr>
                     {% else %}
                         <tr>

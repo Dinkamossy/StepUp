@@ -150,29 +150,29 @@ form .fields .input-field{
 
 </style>
     <div class="container">
-        <h1>{% block title %}Account settings for {{ g.user['username'] }}{% endblock %}</h1>
+        <h1>{% block title %}Account settings for {{ g.user[1] }}{% endblock %}</h1>
         <form method="post" enctype="multipart/form-data">
             <div class="form-first">
                 <div class="personal details">
                     <div class="fields">
                         <div class="input-field">
                             <label for="username">Username</label>
-                            <input name="username" id="username" required value="{{ g.user['username'] }}">
+                            <input name="username" id="username" required value="{{ g.user[1] }}">
                         </div>
                         <div class="input-field">
                             <label for="email">Email Address</label>
                             <input name="email" id="email" required
-                                   value="{{ g.user['email'] }}">
+                                   value="{{ g.user[3] }}">
                         </div>
                         <div class="input-field">
                             <label for="age">Age of User</label>
-                            <input name="age" id="age" required value="{{ g.user['age'] }}">
+                            <input name="age" id="age" required value="{{ g.user[7] }}">
                         </div>
                         <div class="input-field" style="float: left">
                             <label for="picture" style="float: left">Profile picture</label>
                             {% if g.user['picture'] %}
                                 <span><img class="picture"
-                                           src="data:image/png;base64, {{ g.user["picture"] | make_image }}"
+                                           src="data:image/png;base64, {{ g.user[4] | make_image }}"
                                            id="picture" style="width:100px;height:100px;margin-top: 20px;"
                                            alt="User's profile picture"/></span>
                             {% else %}

@@ -40,19 +40,19 @@
                 {% for user in user %}
                     {% set row.counter = row.counter + 1 %}
                     <tr>
-                    <td style="color:black">{{ user['username'] }}</td>
-                    <td style="color:black">{{ user['sex'] }}</td>
-                    <td style="color:black">{{ user['race'] }}</td>
-                    <td style="color:black">{{ user['age'] }}</td>
-                    <td style="color:black">{{ user['feet'] }}'{{ user['inches'] }}</td>
-                    <td style="color:black">{{ user['current_weight'] }}</td>
-                    <td style="color:black">{{ user['target_weight'] }}</td>
-                    <td style="color:black">{{ user['weight_circum'] }}</td>
-                    <td style="color:black">{{ user['neck_circum'] }}</td>
-                    <td style="color:black">{{ user['body_fat_per'] }}</td>
-                    <td style="color:black">{{ user['steps'] }}</td>
+                    <td style="color:black">{{ user[1] }}</td>
+                    <td style="color:black">{{ user[5] }}</td>
+                    <td style="color:black">{{ user[6] }}</td>
+                    <td style="color:black">{{ user[7] }}</td>
+                    <td style="color:black">{{ user[8] }}'{{ user[9] }}</td>
+                    <td style="color:black">{{ user[10] }}</td>
+                    <td style="color:black">{{ user[11] }}</td>
+                    <td style="color:black">{{ user[12] }}</td>
+                    <td style="color:black">{{ user[13] }}</td>
+                    <td style="color:black">{{ user[14] }}</td>
+                    <td style="color:black">{{ user[15] }}</td>
 
-                    {% if user['role'] == 1 %}
+                    {% if user[16] == 1 %}
                         <td style="color:black">
                             Admin
                         </td>

@@ -1,18 +1,21 @@
-from step_up.database import get_database
+from step_up.database import get_mysql
+from step_up.__init__ import mysql
 
 
 def steps_calculator(userid):
     # Get handle on DB
-    database = get_database()
+    conn = mysql.connect()
+    database = conn.cursor()
     # Get info from the database
-    user_info = database.execute(
-        "SELECT sex, current_weight, target_weight, body_fat_per FROM user WHERE userid = ?", (userid,)
-    ).fetchone()
+    database.execute(
+        "SELECT * FROM user WHERE userid = %s", (userid,)
+    )
+    user_info = database.fetchone()
 
-    sex = user_info['sex']
-    current_weight = user_info['current_weight']
-    target_weight = user_info['target_weight']
-    body_fat_per = user_info['body_fat_per']
+    sex = user_info[5]
+    current_weight = user_info[10]
+    target_weight = user_info[11]
+    body_fat_per = user_info[14]
 
     # conversion for kilograms from pounds: '/ 2.205'
     current_weight_kg = current_weight / 2.205
@@ -39,20 +42,21 @@ def steps_calculator(userid):
 
     # Adds value to the database
     database.execute(
-        "UPDATE user SET steps = ? WHERE userid = ?", (daily_steps, userid))
-    database.commit()
+        "UPDATE user SET steps = %s WHERE userid = %s", (daily_steps, userid))
+    conn.commit()
 
 
 def get_steps(userid):
     # Get a handle on the db
-    database = get_database()
+    database = get_mysql()
 
     # Get current steps
-    step = database.execute(
-        "Select steps FROM user where userid = ?", (userid,)
-    ).fetchone()
+    database.execute(
+        "Select steps FROM user where userid = %s", (userid,)
+    )
+    step = database.fetchone()
 
-    steps = int(step['steps'])
+    steps = int(step[0])
 
     # if steps == 0:
     #    steps = "Click on 'Survey' to calculate your steps!"
@@ -61,8 +65,9 @@ def get_steps(userid):
 
 
 def get_user(userid):
-    database = get_database()
-    user = database.execute(
-        "Select * FROM user where userid = ?", (userid,)
-    ).fetchone()
+    database = get_mysql()
+    database.execute(
+        "Select * FROM user where userid = %s", (userid,)
+    )
+    user = database.fetchone()
     return user
